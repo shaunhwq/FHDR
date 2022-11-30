@@ -7,7 +7,6 @@ from torch.autograd import Variable
 class FHDR(nn.Module):
     def __init__(self, iteration_count):
         super(FHDR, self).__init__()
-        print("FHDR model initialised")
 
         self.iteration_count = iteration_count
 
@@ -23,7 +22,6 @@ class FHDR(nn.Module):
         self.tanh = nn.Tanh()
 
     def forward(self, input):
-
         outs = []
 
         feb1 = F.relu(self.feb1(self.reflect_pad(input)))
@@ -38,6 +36,9 @@ class FHDR(nn.Module):
             out = self.hrb2(self.reflect_pad(hrb1))
             out = self.tanh(out)
             outs.append(out)
+
+        # Reset feedback block and dilated dense blocks
+        self.feedback_block.reset()
 
         return outs
 
@@ -73,6 +74,12 @@ class FeedbackBlock(nn.Module):
         self.last_hidden = Variable(self.last_hidden.data)
 
         return out
+
+    def reset(self):
+        self.should_reset = True
+        self.DRDB1.should_reset = True
+        self.DRDB2.should_reset = True
+        self.DRDB3.should_reset = True
 
 
 class DilatedResidualDenseBlock(nn.Module):

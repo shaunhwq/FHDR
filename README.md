@@ -137,6 +137,22 @@ python3 test.py --ckpt_path /path/to/pth/checkpoint
 python3 test.py --log_scores
 ```
 
+## Testing (on external image, for cuda 10.0
+
+Installation
+```
+conda create -n LANet python=3.7
+conda install pytorch==1.3.1 torchvision==0.4.2 cudatoolkit=10.1 -c pytorch
+pip3 install -r requirements.txt
+```
+
+Running
+```
+# Only iteration number 1 & 2 supported for now by authors. 3 and 4 weights not provided.
+export CUDA_VISIBLE_DEVICES=3
+python3 fhdr_demo.py --input_dir path_to_input_dir --output_dir path_to_output_dir --iter_num iteration_number
+```
+
 Citation
 ----------
 If you use this code for your research, please cite the following [paper](http://arxiv.org/abs/1912.11463). 
